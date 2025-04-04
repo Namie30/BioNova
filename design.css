@@ -509,8 +509,7 @@ footer {
   }
   /* Founders & About Sections */
   .founders-container,
-  .about-container,
-  .partner-track {
+  .about-container {
     flex-direction: column;
     align-items: center;
   }
@@ -521,6 +520,12 @@ footer {
   }
   .flow-arrow {
     margin: 15px 0;
+  }
+  /* Ensure Partner Slider remains horizontal */
+  #partners .partner-track {
+    flex-direction: row;
+    align-items: center;
+    width: 200%;
   }
 }
 
