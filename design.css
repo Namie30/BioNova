@@ -10,6 +10,12 @@ body {
   color: #333;
 }
 
+/* Global image styling for responsiveness */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 /* Container */
 .container {
   width: 90%;
@@ -477,6 +483,7 @@ footer {
   }
 }
 
+/* Mobile-specific adjustments */
 @media (max-width: 480px) {
   /* Header */
   .header-container {
@@ -501,14 +508,72 @@ footer {
     padding: 0 30px;
   }
   /* Founders & About Sections */
-  .founders-container, .about-container, .partner-track {
+  .founders-container,
+  .about-container,
+  .partner-track {
     flex-direction: column;
     align-items: center;
   }
-  .founder, .about-image, .flow-step {
+  .founder,
+  .about-image,
+  .flow-step {
     width: 90%;
   }
   .flow-arrow {
     margin: 15px 0;
+  }
+}
+
+/* Hamburger Menu Styles */
+/* Hide the nav-toggle checkbox */
+.nav-toggle {
+  display: none;
+}
+
+/* Hamburger icon */
+.hamburger {
+  display: none; /* Hidden on desktop */
+  flex-direction: column;
+  justify-content: space-between;
+  width: 25px;
+  height: 18px;
+  cursor: pointer;
+}
+
+/* Hamburger lines */
+.hamburger span {
+  display: block;
+  height: 3px;
+  background: #333;
+  border-radius: 2px;
+}
+
+/* Show hamburger and hide nav on smaller screens */
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+    margin-left: auto;
+  }
+  /* Hide the nav links by default on mobile */
+  nav ul {
+    display: none;
+    flex-direction: column;
+    background-color: #fff;
+    position: absolute;
+    top: 70px;  /* Adjust based on your header height */
+    right: 0;
+    width: 200px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 10px 0;
+    margin: 0;
+  }
+  /* Show nav links when hamburger is clicked */
+  .nav-toggle:checked ~ nav ul {
+    display: flex;
+  }
+  /* Center nav links on mobile */
+  nav ul li {
+    margin: 10px 0;
+    text-align: center;
   }
 }
