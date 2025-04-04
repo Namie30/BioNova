@@ -6,7 +6,6 @@
 }
 body {
   font-family: 'Montserrat', sans-serif;
-  /* Gentle green gradient background */
   background: linear-gradient(to bottom right, #dcedc1, #f4fdf7);
   color: #333;
 }
@@ -226,9 +225,7 @@ nav ul li a:hover {
   position: relative;
   max-width: 600px;
   margin: 0 auto;
-  /* Keep user from horizontally scrolling the entire page */
   overflow: hidden;
-  /* Add horizontal padding so arrows can sit on the sides */
   padding: 0 60px;
   box-sizing: border-box;
 }
@@ -279,7 +276,6 @@ nav ul li a:hover {
   background: #218838;
   transform: translateY(-50%) scale(1.1);
 }
-/* Position arrows at the new padding edges */
 .slider-btn.prev {
   left: 0;
 }
@@ -293,20 +289,17 @@ nav ul li a:hover {
   padding: 80px 0;
   text-align: center;
 }
-
 #founders h2 {
   font-size: 2.5em;
   margin-bottom: 40px;
   color: #28a745;
 }
-
 .founders-container {
   display: flex;
   justify-content: center;
   gap: 20px;
   flex-wrap: wrap;
 }
-
 .founder {
   background: #f9f9f9;
   padding: 20px;
@@ -315,36 +308,29 @@ nav ul li a:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
 }
-
 .founder:hover {
   transform: translateY(-5px);
 }
-
 .founder img {
   width: 100%;
   border-radius: 50%;
   margin-bottom: 15px;
 }
-
 .founder h3 {
   font-size: 1.5em;
   margin-bottom: 10px;
   color: #333;
   white-space: nowrap;
 }
-
 .founder p {
   font-size: 1.2em;
   margin-bottom: 10px;
   color: #666;
 }
-
-/* LinkedIn Icon Styling */
 .founder-social {
   margin-top: 10px;
   text-align: center;
 }
-
 .linkedin-icon {
   width: 40px;
   height: 40px;
@@ -352,11 +338,9 @@ nav ul li a:hover {
   margin-top: 5px;
   transition: transform 0.3s ease;
 }
-
 .linkedin-icon:hover {
   transform: scale(1.1);
 }
-
 
 /* Partners Slider */
 #partners {
@@ -402,53 +386,42 @@ nav ul li a:hover {
   padding: 80px 0;
   text-align: center;
 }
-
 #contact h2 {
   font-size: 2.5em;
   margin-bottom: 20px;
   color: #28a745;
 }
-
 #contact p {
   font-size: 1.1em;
   margin-bottom: 40px;
 }
-
-/* Contact details container */
 .contact-details {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 60px;
 }
-
 .contact-item {
   display: flex;
   align-items: center;
   gap: 15px;
   font-size: 1.1em;
 }
-
 .contact-item i {
   font-size: 2em;
   color: #28a745;
 }
-
-/* Social icons container */
 .contact-social {
   margin-top: 30px;
   display: flex;
   justify-content: center;
   gap: 20px;
 }
-
-/* Social icon images */
 .contact-social img {
-  width: 40px;     /* Adjust as needed */
-  height: 40px;    /* Adjust as needed */
+  width: 40px;
+  height: 40px;
   transition: transform 0.3s ease;
 }
-
 .contact-social img:hover {
   transform: scale(1.1);
 }
@@ -501,5 +474,41 @@ footer {
   }
   .flow-arrow {
     margin: 20px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Header */
+  .header-container {
+    padding: 10px;
+  }
+  nav ul li {
+    margin: 10px 0;
+  }
+  /* Hero Section */
+  .hero-content h2 {
+    font-size: 2em;
+  }
+  .slogan {
+    font-size: 1.2em;
+  }
+  .btn {
+    padding: 10px 25px;
+    font-size: 0.9em;
+  }
+  /* Slider adjustments */
+  .slider {
+    padding: 0 30px;
+  }
+  /* Founders & About Sections */
+  .founders-container, .about-container, .partner-track {
+    flex-direction: column;
+    align-items: center;
+  }
+  .founder, .about-image, .flow-step {
+    width: 90%;
+  }
+  .flow-arrow {
+    margin: 15px 0;
   }
 }
