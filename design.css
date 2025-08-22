@@ -51,7 +51,7 @@ nav ul li a {
 }
 nav ul li a:hover { color: #28a745; }
 
-/* Hero Section */
+/* Hero Section (legacy baseline — kept for fallbacks) */
 #hero {
   position: relative;
   height: 100vh;
@@ -92,7 +92,7 @@ nav ul li a:hover { color: #28a745; }
 .flow-arrow { width: 50px; margin: 0 20px; font-size: 2em; color: #28a745; animation: pulse 1.5s infinite; }
 @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
 
-/* Achievements (Full-width, smaller images, less space) */
+/* Achievements */
 #achievements { background: #f4fdf7; padding: 70px 0 50px; text-align: center; animation: fadeIn 1.5s ease; }
 #achievements h2 { font-size: 2.5em; margin-bottom: 30px; color: #28a745; }
 #achievements .container { max-width: 1400px; width: min(95vw, 1400px); }
@@ -192,10 +192,7 @@ nav ul li a:hover { color: #28a745; }
 .partner-slider { overflow: hidden; position: relative; }
 .partner-track { display: flex; width: 200%; animation: scrollPartners 20s linear infinite; }
 .partner-slide { flex: 0 0 auto; padding: 10px; }
-.partner-slide img {
-  height: 90px; margin: 0 20px; vertical-align: middle;
-  filter: grayscale(30%); transition: filter .2s ease, transform .2s ease;
-}
+
 .partner-slide img:hover { filter: grayscale(0%); transform: translateY(-3px); }
 @keyframes scrollPartners { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
 
@@ -203,9 +200,9 @@ nav ul li a:hover { color: #28a745; }
 #contact { background: #fff; padding: 80px 0; text-align: center; }
 #contact h2 { font-size: 2.5em; margin-bottom: 20px; color: #28a745; }
 #contact p { font-size: 1.1em; margin-bottom: 40px; }
-.contact-details { display: flex; flex-wrap: wrap; justify-content: center; gap: 60px; }
-.contact-item { display: flex; align-items: center; gap: 15px; font-size: 1.1em; }
-.contact-item i { font-size: 2em; color: #28a745; }
+.contact-details { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 60px; }
+.contact-item { display: inline-flex; align-items: center; gap: 12px; font-size: 1.1em; line-height: 1.2;}
+.contact-item i { font-size: 1.6em; color: #28a745; flex-shrink: 0;}
 .contact-social { margin-top: 30px; display: flex; justify-content: center; gap: 20px; }
 .contact-social img { width: 40px; height: 40px; transition: transform 0.3s ease; }
 .contact-social img:hover { transform: scale(1.1); }
@@ -280,9 +277,269 @@ footer { background: #333; color: #fff; text-align: center; padding: 20px 0; }
 /* Adjust slider arrows on mobile */
 @media (max-width: 768px) {
   .slider-btn {
-    top: 35%;          /* move arrows higher up relative to image */
-    width: 32px;       /* smaller buttons */
+    top: 35%;
+    width: 32px;
     height: 32px;
     font-size: 1.2rem;
   }
+}
+
+/* ===================== SDG CONSTELLATION ========================= */
+.hero-sdgs {
+  position: relative;
+  min-height: clamp(620px, 90vh, 860px);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Animated green background */
+.hero-sdgs .hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(60% 60% at 20% 20%, rgba(255,255,255,0.10) 0%, transparent 60%),
+    radial-gradient(40% 40% at 80% 80%, rgba(255,255,255,0.10) 0%, transparent 60%),
+    linear-gradient(135deg, #34b456, #2aa147 45%, #239345);
+  filter: saturate(1.05);
+  z-index: 0;
+}
+.hero-sdgs .hero-overlay { background: rgba(40,167,69,0.72); z-index: 1; }
+/* Center hero text better within the orbit */
+.hero-sdgs .hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px; /* pushes content down slightly */
+}
+/* Tighter arrow under Learn More */
+.hero-sdgs .hero-cta {
+  margin-top: 8px; /* was 22px, reduced for closeness */
+  gap: 6px;        /* bring arrow closer to text */
+}
+
+/* Circular SDG orbit */
+.sdg-orbit {
+  --nodes: 6;
+  --radius: clamp(200px, 28vw, 340px); /* enlarged */
+  position: absolute;
+  width: calc(var(--radius) * 2 + 140px);
+  height: calc(var(--radius) * 2 + 140px);
+  display: grid;
+  place-items: center;
+  list-style: none;
+  padding: 0; margin: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.sdg-node {
+  --angle: calc((360deg / var(--nodes)) * var(--i));
+  position: absolute;
+  width: 98px; height: 98px;
+  border-radius: 999px;
+  display: grid; place-items: center;
+  transform:
+    rotate(var(--angle))
+    translate(var(--radius))
+    rotate(calc(-1 * var(--angle)));
+  transition: transform .35s ease;
+  animation: floaty 6s ease-in-out infinite;
+  animation-delay: calc(var(--i) * .15s);
+}
+.sdg-node:nth-child(even) { animation-duration: 7s; }
+
+.sdg-node img {
+  width: 84px; height: 84px;
+  border-radius: 999px; background:#fff; object-fit: cover;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.22), 0 2px 6px rgba(0,0,0,0.10) inset;
+  pointer-events: auto;
+  transition: transform .22s ease, box-shadow .22s ease;
+  will-change: transform, box-shadow;
+}
+.sdg-node img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 0 0 3px rgba(255,255,255,0.55);
+}
+
+@keyframes floaty {
+  0% {
+    transform: rotate(var(--angle)) translate(var(--radius)) rotate(calc(-1 * var(--angle)));
+  }
+  50% {
+    transform: rotate(var(--angle)) translate(calc(var(--radius) + 6px)) rotate(calc(-1 * var(--angle)));
+  }
+  100% {
+    transform: rotate(var(--angle)) translate(var(--radius)) rotate(calc(-1 * var(--angle)));
+  }
+}
+
+/* Subtle vignette for depth */
+.hero-sdgs::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(80% 60% at 50% 40%, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.08) 100%);
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+  .sdg-orbit { --radius: clamp(170px, 30vw, 280px); }
+  .sdg-node { width: 88px; height: 88px; }
+  .sdg-node img { width: 76px; height: 76px; }
+}
+
+/* Mobile grid fallback */
+@media (max-width: 640px) {
+  .sdg-orbit {
+    position: static;
+    width: 100%; height: auto;
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px 20px;
+    justify-items: center;
+  }
+  .sdg-node {
+    position: static;
+    transform: none;
+    width: 78px; height: 78px;
+    animation: none;
+  }
+  .sdg-node img { width: 66px; height: 66px; }
+}
+/* Adjust spacing between title, slogan, and Learn More */
+.hero-sdgs .hero-content h2 {
+  margin-bottom: 14px; /* was bigger, now tighter */
+}
+.hero-sdgs .slogan {
+  margin-bottom: 22px; /* keeps balance before Learn More */
+}
+/* ===================== SDG TOOLTIPS (append-only) ===================== */
+.sdg-node { pointer-events: auto; } /* ensures hover/tap works despite orbit setting */
+
+/* Tooltip bubble */
+.sdg-node::after {
+  content: attr(data-sdg);
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  padding: 8px 12px;
+  background: rgba(0,0,0,0.84);
+  color: #fff;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+  z-index: 5;
+}
+
+/* Tooltip arrow */
+.sdg-node::before {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  width: 10px; height: 10px;
+  background: rgba(0,0,0,0.84);
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
+  opacity: 0;
+  transition: opacity .18s ease, transform .18s ease;
+  z-index: 5;
+}
+
+/* Show on hover, keyboard focus, or active (tap) */
+.sdg-node:hover::after,
+.sdg-node:focus-visible::after,
+.sdg-node:active::after,
+.sdg-node:hover::before,
+.sdg-node:focus-visible::before,
+.sdg-node:active::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Keep tooltips readable near edges: nudge horizontally if needed */
+.sdg-node[data-tip-left]::after,
+.sdg-node[data-tip-left]::before { left: 40%; }
+.sdg-node[data-tip-right]::after,
+.sdg-node[data-tip-right]::before { left: 60%; }
+
+/* Mobile grid: place tooltip above but allow wrapping */
+@media (max-width: 640px) {
+  .sdg-node::after {
+    white-space: normal;
+    text-align: center;
+    max-width: 160px;
+  }
+}
+
+/* Reduced motion: disable subtle movement on tooltips */
+@media (prefers-reduced-motion: reduce) {
+  .sdg-node::after,
+  .sdg-node::before {
+    transition: none;
+  }
+}
+/* Partners Slider (brighter logos, a bit larger, nicer hover) */
+#partners { background: #e0f2e9; padding: 80px 0; text-align: center; }
+#partners h2 { font-size: 2.5em; margin-bottom: 40px; color: #28a745; }
+
+.partner-slider { overflow: hidden; position: relative; }
+
+/* keep the marquee effect */
+.partner-track {
+  display: flex;
+  width: 200%;
+  animation: scrollPartners 20s linear infinite;
+  align-items: center;
+}
+
+/* each logo cell */
+.partner-slide {
+  flex: 0 0 auto;
+  padding: 10px;
+}
+
+/* >>> brighter, larger, no grayscale */
+.partner-slide img {
+  height: 90px;
+  margin: 0 32px;
+  vertical-align: middle;
+  filter: brightness(1.12) contrast(1.08) saturate(1.05);
+  transition: transform .25s ease, filter .25s ease;
+}
+
+/* gentle pop on hover */
+.partner-slide img:hover {
+  transform: translateY(-2px) scale(1.05);
+  filter: brightness(1.22) contrast(1.12) saturate(1.1);
+}
+
+/* marquee keyframes unchanged */
+@keyframes scrollPartners {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* responsive tweaks */
+@media (max-width: 992px) {
+  .partner-slide img { margin: 0 24px; }
+}
+@media (max-width: 640px) {
+  .partner-slide img { height: 80px; margin: 0 16px; }
+}
+
+/* accessibility: reduce motion if user prefers */
+@media (prefers-reduced-motion: reduce) {
+  .partner-track { animation: none; }
 }

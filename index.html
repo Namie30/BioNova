@@ -39,15 +39,34 @@
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section id="hero">
+  <!-- Hero Section (UPGRADED to SDG Constellation) -->
+  <section id="hero" class="hero-sdgs">
+    <div class="hero-bg"></div>
     <div class="hero-overlay"></div>
+
     <div class="hero-content">
       <h2>Welcome to BioNova</h2>
       <p class="slogan">From Waste to Energy</p>
-      <a href="#about" class="btn">Learn More</a>
-      <a href="#achievements" class="scroll-down" aria-label="Scroll to awards"><i class="fas fa-chevron-down"></i></a>
+      <div class="hero-cta">
+        <a href="#about" class="btn">Learn More</a>
+        <a href="#achievements" class="scroll-down" aria-label="Scroll to awards">
+          <i class="fas fa-chevron-down"></i>
+        </a>
+      </div>
     </div>
+
+    <!-- Circular orbit of SDGs -->
+    <ul class="sdg-orbit" aria-label="BioNova Sustainable Development Goals">
+      <!-- Use real icon files in /Images; count = 6 => --nodes: 6 in CSS -->
+      <li class="sdg-node" style="--i:0" data-sdg="SDG 7: Affordable & Clean Energy" tabindex="0"><img src="Images/SDG - 7.jpg"  alt="SDG 7: Affordable & Clean Energy"></li>
+      <li class="sdg-node" style="--i:1" data-sdg="SDG 9: Industry, Innovation & Infrastructure" tabindex="0"><img src="Images/SDG - 9.png"  alt="SDG 9: Industry, Innovation & Infrastructure"></li>
+      <li class="sdg-node" style="--i:2" data-sdg="SDG 11: Sustainable Cities & Communities" tabindex="0"><img src="Images/SDG - 11.png" alt="SDG 11: Sustainable Cities & Communities"></li>
+      <li class="sdg-node" style="--i:3" data-sdg="SDG 12: Responsible Consumption & Production" tabindex="0"><img src="Images/SDG - 12.jpg" alt="SDG 12: Responsible Consumption & Production"></li>
+      <li class="sdg-node" style="--i:4" data-sdg="SDG 17: Partnerships for the Goals" tabindex="0"><img src="Images/SDG - 17.jpg" alt="SDG 13: Climate Action"></li>
+      <li class="sdg-node" style="--i:5" data-sdg="SDG 13: Climate Action" tabindex="0"><img src="Images/SDG - 13.png" alt="SDG 17: Partnerships for the Goals"></li>
+      <!-- Optional SDG 3 -->
+      <!-- <li class="sdg-node" style="--i:6"><img src="Images/SDG3.png"  alt="SDG 3: Good Health & Well-Being"></li> -->
+    </ul>
   </section>
 
   <!-- About Section -->
@@ -139,6 +158,12 @@
             <h3>Junior Achievement Acceleration X Program</h3>
             <p>BioNova participated in the Junior Achievement Acceleration X Program, where we were awarded €2,000 to accelerate our growth. 🌐 This experience not only provided valuable funding but also helped us build strong connections with industry leaders, paving the way for future collaborations and opportunities.</p>
           </div>
+          <!-- Slide 8 -->
+          <div class="slide">
+            <img src="Images/BioNova - Greece4.jpg" alt="EUROPEN Single Market Expansion Award">
+            <h3>EUROPEN Single Market Expansion Award</h3>
+            <p>BioNova becomes the first Georgian startup to ever win the EUROPEN Single Market Expansion Award — in Belgium and gets invited to GEN-E 2025 summit in Greece.</p>
+          </div>
         </div>
         <button class="slider-btn prev" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
         <button class="slider-btn next" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
@@ -146,7 +171,7 @@
     </div>
   </section>
 
-  <!-- Team / Advisors Section (keeps id="founders" for your anchor) -->
+  <!-- Team / Advisors Section -->
   <section id="founders">
     <div class="container">
       <h2><span id="teamTitle">Team</span></h2>
@@ -341,14 +366,14 @@
       <div class="contact-details">
         <!-- Phone -->
         <div class="contact-item">
-          <i class="fas fa-phone-alt" aria-hidden="true"></i>
+          <i class="fas fa-phone-alt"></i>
           <div>
             <p>+995 599 21 88 29</p>
           </div>
         </div>
         <!-- Email -->
         <div class="contact-item">
-          <i class="fas fa-envelope" aria-hidden="true"></i>
+          <i class="fas fa-envelope"></i>
           <div>
             <p>bionovainfo1@gmail.com</p>
           </div>
