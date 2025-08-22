@@ -277,3 +277,12 @@ footer { background: #333; color: #fff; text-align: center; padding: 20px 0; }
   .hero-content .slogan { font-size: 1.2em; }
   .btn { padding: 10px 25px; font-size: 0.9em; }
 }
+/* Adjust slider arrows on mobile */
+@media (max-width: 768px) {
+  .slider-btn {
+    top: 35%;          /* move arrows higher up relative to image */
+    width: 32px;       /* smaller buttons */
+    height: 32px;
+    font-size: 1.2rem;
+  }
+}
