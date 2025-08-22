@@ -7,9 +7,7 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
   <!-- FontAwesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" 
-        integrity="sha512-Fo3rlrZj/k7ujTnH/PRFJ4F8sK9k+5U5k5XHn1H5JQ5aJ1D9nGq5s9p0Q5z+eG5z1dF5gI0p4o5gI0Xz8/r6RQ==" 
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="design.css">
 </head>
 <body>
@@ -21,8 +19,8 @@
         <h1 class="logo">BioNova</h1>
       </div>
       <!-- Hamburger menu toggle for mobile -->
-      <input type="checkbox" id="nav-toggle" class="nav-toggle">
-      <label for="nav-toggle" class="hamburger">
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Toggle navigation">
+      <label for="nav-toggle" class="hamburger" aria-hidden="true">
         <span></span>
         <span></span>
         <span></span>
@@ -32,7 +30,8 @@
           <li><a href="#about">What We Do</a></li>
           <li><a href="#how-it-works">How It Works</a></li>
           <li><a href="#achievements">Our Wins</a></li>
-          <li><a href="#founders">Founders</a></li>
+          <!-- text changed to Team, same anchor keeps working -->
+          <li><a href="#founders">Team</a></li>
           <li><a href="#partners">Partners</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
@@ -47,7 +46,7 @@
       <h2>Welcome to BioNova</h2>
       <p class="slogan">From Waste to Energy</p>
       <a href="#about" class="btn">Learn More</a>
-      <a href="#achievements" class="scroll-down"><i class="fas fa-chevron-down"></i></a>
+      <a href="#achievements" class="scroll-down" aria-label="Scroll to awards"><i class="fas fa-chevron-down"></i></a>
     </div>
   </section>
 
@@ -100,81 +99,164 @@
         <div class="slides">
           <!-- Slide 1 -->
           <div class="slide">
-            <img src="Images/CUnicorn-3.jpg" alt="Award 1">
+            <img src="Images/CUnicorn-3.jpg" alt="CUnicorn Batch 3 award">
             <h3>CUnicorn Batch 3</h3>
             <p>BioNova emerged as the winner of CUnicorn Batch 3, a prestigious acceleration program at Caucasus University. 🏆 This victory was just the beginning, fueling our drive to expand BioNova and create a lasting impact in the AgTech sector. ✨</p>
           </div>
           <!-- Slide 2 -->
           <div class="slide">
-            <img src="Images/Social Impact 2024.jpg" alt="Award 2">
+            <img src="Images/Social Impact 2024.jpg" alt="Social Impact Award 2024">
             <h3>Social Impact Award 2024</h3>
             <p>BioNova was named a winner of the Social Impact Award 2024, a recognition of our dedication to sustainability and social innovation. This milestone highlights our efforts in turning waste into clean energy, driving meaningful impact in the AgTech industry. 🌱 As part of the win, we received an invitation to the prestigious Social Entrepreneurship Summit in Germany, further fueling our commitment to global impact.</p>
           </div>
           <!-- Slide 3 -->
           <div class="slide">
-            <img src="Images/GITA 25K.jpg" alt="Award 3">
+            <img src="Images/GITA 25K.jpg" alt="GITA 25K grant">
             <h3>GITA Regional Grant Competition - 25K</h3>
             <p>BioNova was awarded the prestigious GITA 25K grant, one of the standout achievements in our journey. This funding has played a crucial role in helping us scale our waste-to-energy technology and advance our mission to drive sustainable innovation. 🚀</p>
           </div>
           <!-- Slide 4 -->
           <div class="slide">
-            <img src="Images/Poland.jpg" alt="Award 4">
+            <img src="Images/Poland.jpg" alt="Poland AgriTech Program">
             <h3>Poland AgriTech Acceleration Program</h3>
             <p>Through GITA’s program, BioNova had the exciting opportunity to take our idea beyond borders and showcase it on an international stage. During the Poland AgriTech Acceleration Program, we were proud to be recognized as one of the top 3 AgriTech startups from Georgia, 🚀 marking a significant milestone in our journey toward global recognition and impact.</p>
           </div>
           <!-- Slide 5 -->
           <div class="slide">
-            <img src="Images/Future Agro Challange.jpg" alt="Award 5">
+            <img src="Images/Future Agro Challange.jpg" alt="Future Agro Challenge">
             <h3>Future Agro Challenge 2024</h3>
             <p>BioNova was named the winner of the Future Agro Challenge 2024, recognizing our dedication to revolutionizing sustainable agriculture. As part of this achievement, we were honored as Agropreneurs of the Year and invited to the Agripreneur World Summit in Greece. 🌍 This recognition strengthens our mission to drive innovation in the agricultural sector.</p>
           </div>
           <!-- Slide 6 -->
           <div class="slide">
-            <img src="Images/Seed Kaspi 7K.jpg" alt="Award 6">
+            <img src="Images/Seed Kaspi 7K.jpg" alt="SEED Kaspi grant">
             <h3>SEED Kaspi 7K</h3>
             <p>BioNova was awarded the SEED Kaspi €7,000 grant, an important step in bringing our vision to life. Through this opportunity, we connected with several companies, gaining firsthand insight into their factory operations. Additionally, we engaged with farmers interested in testing our solution on their farms. This funding is being used to purchase all the necessary equipment for our first MVP, bringing us closer to real-world implementation.⚡</p>
           </div>
           <!-- Slide 7 -->
           <div class="slide">
-            <img src="Images/Junior Achievement .jpg" alt="Award 7">
+            <img src="Images/Junior Achievement .jpg" alt="Junior Achievement Acceleration X">
             <h3>Junior Achievement Acceleration X Program</h3>
             <p>BioNova participated in the Junior Achievement Acceleration X Program, where we were awarded €2,000 to accelerate our growth. 🌐 This experience not only provided valuable funding but also helped us build strong connections with industry leaders, paving the way for future collaborations and opportunities.</p>
           </div>
         </div>
-        <button class="slider-btn prev"><i class="fas fa-chevron-left"></i></button>
-        <button class="slider-btn next"><i class="fas fa-chevron-right"></i></button>
+        <button class="slider-btn prev" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
+        <button class="slider-btn next" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
       </div>
     </div>
   </section>
 
-  <!-- Founders Section -->
+  <!-- Team / Advisors Section (keeps id="founders" for your anchor) -->
   <section id="founders">
     <div class="container">
-      <h2>Founders</h2>
-      <div class="founders-container">
-        <!-- Founder 1 -->
-        <div class="founder">
-          <img src="Images/CEO (2).jpeg" alt="Nikoloz Gongliashvili">
-          <h3>Nikoloz Gongliashvili</h3>
-          <p>CEO</p>
-          <div class="founder-social">
-            <a href="https://www.linkedin.com/in/nikoloz-gongliashvili/" target="_blank" title="LinkedIn Profile">
-              <img src="Images/Linkedin.png" alt="LinkedIn Icon" class="linkedin-icon">
-            </a>
-          </div>
-        </div>
-        <!-- Founder 3 -->
-        <div class="founder">
-          <img src="Images/CTO.png" alt="Nikoloz Chikhladze">
-          <h3>Nikoloz Chikhladze</h3>
-          <p>CTO</p>
-          <div class="founder-social">
-            <a href="https://www.linkedin.com/in/nikoloz-chikhladze-901181271/" target="_blank" title="LinkedIn Profile">
-              <img src="Images/Linkedin.png" alt="LinkedIn Icon" class="linkedin-icon">
-            </a>
-          </div>
-        </div>
+      <h2><span id="teamTitle">Team</span></h2>
+
+      <!-- Toggle pills -->
+      <div class="team-toggle" role="tablist" aria-label="People tabs">
+        <button class="toggle-btn is-active" id="tab-team" role="tab" aria-selected="true" aria-controls="panel-team">Core Team</button>
+        <button class="toggle-btn" id="tab-advisors" role="tab" aria-selected="false" aria-controls="panel-advisors">Advisors</button>
       </div>
+
+      <div class="people-panels">
+        <!-- TEAM PANEL -->
+        <div class="panel show" id="panel-team" role="tabpanel" aria-labelledby="tab-team">
+          <div class="founders-container">
+            <!-- CEO -->
+            <div class="founder">
+              <img src="Images/CEO (2).jpeg" alt="Nikoloz Gongliashvili">
+              <h3>Nikoloz Gongliashvili</h3>
+              <p>CEO</p>
+              <div class="founder-social">
+                <a href="https://www.linkedin.com/in/nikoloz-gongliashvili/" target="_blank" rel="noopener">
+                  <i class="fa-brands fa-linkedin-in"></i>
+                </a>
+              </div>
+            </div>
+
+            <!-- CTO -->
+            <div class="founder">
+              <img src="Images/CTO.png" alt="Nikoloz Chikhladze">
+              <h3>Nikoloz Chikhladze</h3>
+              <p>CTO</p>
+              <div class="founder-social">
+                <a href="https://www.linkedin.com/in/nikoloz-chikhladze-901181271/" target="_blank" rel="noopener">
+                  <i class="fa-brands fa-linkedin-in"></i>
+                </a>
+              </div>
+            </div>
+
+            <!-- CPO -->
+            <div class="founder">
+              <img src="Images/CPO - Image-pica.png" alt="Your CPO name">
+              <h3>Abdul Rehman</h3>
+              <p>CPO</p>
+              <div class="founder-social">
+                <a href="https://www.linkedin.com/in/engr-abdul-rehman-425235242/" target="_blank" rel="noopener">
+                  <i class="fa-brands fa-linkedin-in"></i>
+                </a>
+              </div>
+            </div>
+
+            <!-- CFO -->
+            <div class="founder">
+              <img src="Images/CFO - Image.jpg" alt="Your CFO name">
+              <h3>Mariam Beltadze</h3>
+              <p>CFO</p>
+              <div class="founder-social">
+                <a href="https://www.linkedin.com/in/mariam-beltadze-538455353/" target="_blank" rel="noopener">
+                  <i class="fa-brands fa-linkedin-in"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADVISORS PANEL -->
+        <div class="panel" id="panel-advisors" role="tabpanel" aria-labelledby="tab-advisors" hidden>
+          <div class="founders-container">
+            <div class="founder">
+              <img src="Images/Natela-pica.png" alt="Advisor 1">
+              <h3>Natela Khetsuriani</h3>
+              <p>40+ Years of experience in Bioscience</p>
+              <div class="founder-social">
+                <a href="https://www.linkedin.com/in/natela-khetsuriani-b0b71313/" target="_blank" rel="noopener">
+                  <i class="fa-brands fa-linkedin-in"></i>
+                </a>
+              </div>
+            </div>
+            <div class="founder">
+              <img src="Images/Advisor - Image.png" alt="Advisor 2">
+              <h3>Irakli svanidze</h3>
+              <p>Startup Mentor | 8+ Years Experience | Head of Innovation</p>
+              <div class="founder-social">
+                <a href="https://www.linkedin.com/in/irakli-svanidze-b3a34914a/" target="_blank" rel="noopener">
+                  <i class="fa-brands fa-linkedin-in"></i>
+                </a>
+              </div>
+            </div>
+            <div class="founder">
+              <img src="Images/Advisor2 - Image.png" alt="Advisor 3">
+              <h3>Otar Antia</h3>
+              <p>Greentech Expert 10+ Years of Experience</p>
+              <div class="founder-social">
+                <a href="https://www.linkedin.com/in/oantia1989/" target="_blank" rel="noopener">
+                  <i class="fa-brands fa-linkedin-in"></i>
+                </a>
+              </div>
+            </div>
+            <div class="founder">
+              <img src="Images/SocMed - Image.png" alt="Advisor 4">
+              <h3>Ana Dolidze</h3>
+              <p>Social Media Manager </p>
+              <div class="founder-social">
+                <a href="https://www.linkedin.com/in/ana-dolidze-a014b124a/" target="_blank" rel="noopener">
+                  <i class="fa-brands fa-linkedin-in"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> <!-- /people-panels -->
     </div>
   </section>
 
@@ -185,65 +267,65 @@
       <div class="partner-slider">
         <div class="partner-track">
           <div class="partner-slide">
-            <img src="Images/CU-Logo.png" alt="Partner 1">
+            <img src="Images/CU-Logo.png" alt="Caucasus University">
           </div>
           <div class="partner-slide">
-            <img src="Images/Social Impact - Logo-picaai.png" alt="Partner 2">
+            <img src="Images/Social Impact - Logo-picaai.png" alt="Social Impact Award">
           </div>
           <div class="partner-slide">
-            <img src="Images/JA - Logo (2).png" alt="Partner 3">
+            <img src="Images/JA - Logo (2).png" alt="Junior Achievement">
           </div>
           <div class="partner-slide">
-            <img src="Images/Danish - Logo (2).png" alt="Partner 4">
+            <img src="Images/Danish - Logo (2).png" alt="Danish Embassy">
           </div>
           <div class="partner-slide">
-            <img src="Images/GITA - Logo.png" alt="Partner 5">
+            <img src="Images/GITA - Logo.png" alt="GITA">
           </div>
           <div class="partner-slide">
-            <img src="Images/Rethink - Logo.png" alt="Partner 5">
+            <img src="Images/Rethink - Logo.png" alt="Rethink">
           </div>
           <div class="partner-slide">
-            <img src="Images/Future Agro - Logo.png" alt="Partner 5">
+            <img src="Images/Future Agro - Logo.png" alt="Future Agro Challenge">
           </div>
           <div class="partner-slide">
-            <img src="Images/Seed Kaspi - Logo.png" alt="Partner 5">
+            <img src="Images/Seed Kaspi - Logo.png" alt="SEED Kaspi">
           </div>
           <div class="partner-slide">
-            <img src="Images/SA - Logo.png" alt="Partner 5">
+            <img src="Images/SA - Logo.png" alt="Social Entrepreneurship Summit">
           </div>
           <div class="partner-slide">
-            <img src="Images/Parp - Logo.png" alt="Partner 5">
+            <img src="Images/Parp - Logo.png" alt="PARP">
           </div>
           <!-- Duplicate for continuous scrolling -->
           <div class="partner-slide">
-            <img src="Images/CU-Logo.png" alt="Partner 1">
+            <img src="Images/CU-Logo.png" alt="Caucasus University duplicate">
           </div>
           <div class="partner-slide">
-            <img src="Images/Social Impact - Logo-picaai.png" alt="Partner 2">
+            <img src="Images/Social Impact - Logo-picaai.png" alt="Social Impact Award duplicate">
           </div>
           <div class="partner-slide">
-            <img src="Images/JA - Logo (2).png" alt="Partner 3">
+            <img src="Images/JA - Logo (2).png" alt="Junior Achievement duplicate">
           </div>
           <div class="partner-slide">
-            <img src="Images/Danish - Logo (2).png" alt="Partner 4">
+            <img src="Images/Danish - Logo (2).png" alt="Danish Embassy duplicate">
           </div>
           <div class="partner-slide">
-            <img src="Images/GITA - Logo.png.png" alt="Partner 5">
+            <img src="Images/GITA - Logo.png" alt="GITA duplicate">
           </div>
           <div class="partner-slide">
-            <img src="Images/Rethink - Logo.png" alt="Partner 5">
+            <img src="Images/Rethink - Logo.png" alt="Rethink duplicate">
           </div>
           <div class="partner-slide">
-            <img src="Images/Future Agro - Logo.png" alt="Partner 5">
+            <img src="Images/Future Agro - Logo.png" alt="Future Agro Challenge duplicate">
           </div>
           <div class="partner-slide">
-            <img src="Images/Seed Kaspi - Logo.png" alt="Partner 5">
+            <img src="Images/Seed Kaspi - Logo.png" alt="SEED Kaspi duplicate">
           </div>
           <div class="partner-slide">
-            <img src="Images/SA - Logo.png" alt="Partner 5">
+            <img src="Images/SA - Logo.png" alt="Social Entrepreneurship Summit duplicate">
           </div>
           <div class="partner-slide">
-            <img src="Images/Parp - Logo.png" alt="Partner 5">
+            <img src="Images/Parp - Logo.png" alt="PARP duplicate">
           </div>
         </div>
       </div>
@@ -259,14 +341,14 @@
       <div class="contact-details">
         <!-- Phone -->
         <div class="contact-item">
-          <i class="fas fa-phone-alt"></i>
+          <i class="fas fa-phone-alt" aria-hidden="true"></i>
           <div>
             <p>+995 599 21 88 29</p>
           </div>
         </div>
         <!-- Email -->
         <div class="contact-item">
-          <i class="fas fa-envelope"></i>
+          <i class="fas fa-envelope" aria-hidden="true"></i>
           <div>
             <p>bionovainfo1@gmail.com</p>
           </div>
@@ -274,10 +356,10 @@
       </div>
       <!-- Social Icons: Facebook & LinkedIn -->
       <div class="contact-social">
-        <a href="https://www.facebook.com/profile.php?id=61565137637831" target="_blank">
+        <a href="https://www.facebook.com/profile.php?id=61565137637831" target="_blank" aria-label="BioNova on Facebook">
           <img src="Images/Facebook-icon.png" alt="Facebook Icon" />
         </a>
-        <a href="https://www.linkedin.com/company/bionovatech/" target="_blank">
+        <a href="https://www.linkedin.com/company/bionovatech/" target="_blank" aria-label="BioNova on LinkedIn">
           <img src="Images/linkedin.png" alt="LinkedIn Icon" />
         </a>
       </div>
