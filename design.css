@@ -437,3 +437,7 @@ footer { background: #333; color: #fff; text-align: center; padding: 20px 0; }
 @media (prefers-reduced-motion: reduce) {
   .sdg-node::after, .sdg-node::before { transition: none; }
 }
+.flow-step:nth-child(2) .step-image {
+  width: 420px;
+}
+
