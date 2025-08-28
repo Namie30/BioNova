@@ -437,7 +437,23 @@ footer { background: #333; color: #fff; text-align: center; padding: 20px 0; }
 @media (prefers-reduced-motion: reduce) {
   .sdg-node::after, .sdg-node::before { transition: none; }
 }
-.flow-step:nth-child(2) .step-image {
-  width: 420px;
+
+
+/* ====================== FIXES (ADDED) ======================= */
+
+/* 1) Prevent SDG tooltips from being clipped by the hero or header */
+.hero-sdgs { overflow: visible; }       /* override previous hidden */
+.sdg-orbit { overflow: visible; }
+.sdg-node::after,
+.sdg-node::before { z-index: 10000; }   /* above header (z-index: 999) */
+
+/* 2) Ensure names/titles always show for Team & Advisors */
+.founder { height: auto; }              /* allow card to grow on small screens */
+.founder h3 { white-space: normal; }    /* wrap long names instead of ellipsis */
+.founder h3, .founder p, .founder-social { position: relative; z-index: 1; }
+
+/* Optional: keep similar height rhythm on larger screens */
+@media (min-width: 769px){
+  .founder { min-height: 380px; }
 }
 
