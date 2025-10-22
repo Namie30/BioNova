@@ -185,8 +185,18 @@ nav ul li a:hover { color:#28a745; }
 .partner-plan { border:1px solid #fecaca; }
 .popular { box-shadow:0 16px 34px rgba(185, 28, 28, .18); }
 .discount-ribbon {
-  position:absolute; top:12px; left:-40px; transform:rotate(-18deg);
-  background:#ef4444; color:#fff; padding:6px 48px; font-weight:800; letter-spacing:.5px; box-shadow:0 6px 18px rgba(239,68,68,.35);
+  position: absolute;
+  top: 4px;              /* lowered back into card */
+  left: -10px;           /* slight overlap for style */
+  transform: rotate(-10deg);
+  background: #ef4444;
+  color: #fff;
+  padding: 4px 28px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  box-shadow: 0 3px 8px rgba(239, 68, 68, 0.25);
+  z-index: 10;           /* ensures it's above everything */
+  border-radius: 3px;
 }
 
 .fineprint { color:#6b7280; font-size:.85rem; margin-top:10px; }
@@ -635,3 +645,4 @@ footer { background:#333; color:#fff; text-align:center; padding:20px 0; }
 .linkedin-btn i {
   font-size: 18px;
 }
+
