@@ -1,362 +1,591 @@
-// slider.js
-document.addEventListener('DOMContentLoaded', () => {
-  /* ===================== Achievements Slider ===================== */
-  const slides = document.querySelectorAll('.slide');
-  const slidesContainer = document.querySelector('.slides');
-  const nextBtn = document.querySelector('.slider-btn.next');
-  const prevBtn = document.querySelector('.slider-btn.prev');
-  let currentSlide = 0;
-  let intervalId;
+/* BioNova interactions (vanilla JS) */
 
-  function updateSlider() {
-    if (!slidesContainer) return;
-    slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+(function () {
+  'use strict';
+
+  const qs = (sel, root = document) => root.querySelector(sel);
+  const qsa = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+  function prefersReducedMotion() {
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
-  function nextSlide() {
-    if (!slides.length) return;
-    currentSlide = (currentSlide + 1) % slides.length;
-    updateSlider();
-  }
+  /* =======================
+   * Mobile nav
+   * ======================= */
+  function initNav() {
+    const toggle = qs('#navToggle');
+    const nav = qs('#siteNav');
+    if (!toggle || !nav) return;
 
-  function prevSlide() {
-    if (!slides.length) return;
-    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-    updateSlider();
-  }
-
-  nextBtn?.addEventListener('click', () => { nextSlide(); resetInterval(); });
-  prevBtn?.addEventListener('click', () => { prevSlide(); resetInterval(); });
-
-  function resetInterval() {
-    clearInterval(intervalId);
-    intervalId = setInterval(nextSlide, 5000);
-  }
-  intervalId = setInterval(nextSlide, 5000);
-
-  /* ===== Team/Advisors toggle (accessible + animated) ===== */
-  const teamTitle = document.getElementById('teamTitle');
-  const tabTeam = document.getElementById('tab-team');
-  const tabAdvisors = document.getElementById('tab-advisors');
-  const panelTeam = document.getElementById('panel-team');
-  const panelAdvisors = document.getElementById('panel-advisors');
-
-  function activateTab(target) {
-    const isTeam = target === 'team';
-
-    tabTeam?.classList.toggle('is-active', isTeam);
-    tabAdvisors?.classList.toggle('is-active', !isTeam);
-
-    tabTeam?.setAttribute('aria-selected', String(isTeam));
-    tabAdvisors?.setAttribute('aria-selected', String(!isTeam));
-
-    if (isTeam) {
-      panelAdvisors?.setAttribute('hidden', '');
-      panelAdvisors?.classList.remove('show');
-      panelTeam?.removeAttribute('hidden');
-      requestAnimationFrame(() => panelTeam?.classList.add('show'));
-      if (teamTitle) teamTitle.textContent = 'Team';
-    } else {
-      panelTeam?.setAttribute('hidden', '');
-      panelTeam?.classList.remove('show');
-      panelAdvisors?.removeAttribute('hidden');
-      requestAnimationFrame(() => panelAdvisors?.classList.add('show'));
-      if (teamTitle) teamTitle.textContent = 'Advisors';
-    }
-  }
-
-  tabTeam?.addEventListener('click', () => activateTab('team'));
-  tabAdvisors?.addEventListener('click', () => activateTab('advisors'));
-
-  [tabTeam, tabAdvisors].forEach(btn => {
-    btn?.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-        const next = btn === tabTeam ? tabAdvisors : tabTeam;
-        next?.focus();
-        next?.click();
-      }
-    });
-  });
-
-  /* ============= App KPIs (demo counters) ============= */
-  function animateValue(el, to, duration = 1200) {
-    if (!el) return;
-    const start = 0;
-    const diff = to - start;
-    let startTs = null;
-
-    const step = (ts) => {
-      if (!startTs) startTs = ts;
-      const p = Math.min((ts - startTs) / duration, 1);
-      el.textContent = (start + diff * p).toFixed(0);
-      if (p < 1) requestAnimationFrame(step);
+    const close = () => {
+      document.body.classList.remove('nav-open');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Open menu');
     };
-    requestAnimationFrame(step);
+
+    const open = () => {
+      document.body.classList.add('nav-open');
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', 'Close menu');
+    };
+
+    toggle.addEventListener('click', () => {
+      const isOpen = document.body.classList.contains('nav-open');
+      if (isOpen) close();
+      else open();
+    });
+
+    // Close when clicking a nav link (mobile)
+    qsa('a[href^="#"]', nav).forEach((a) => {
+      a.addEventListener('click', () => close());
+    });
+
+    // Close on ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+    });
+
+    // Close if resizing to desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 700) close();
+    });
   }
 
-  animateValue(document.getElementById('kpi-gas'), 120);   // m³/day
-  animateValue(document.getElementById('kpi-elec'), 240);  // kWh/day
-  animateValue(document.getElementById('kpi-fert'), 500);  // liters/day
+  /* =======================
+   * Active nav on scroll
+   * ======================= */
+  function initActiveNav() {
+    const nav = qs('#siteNav');
+    if (!nav) return;
 
-  /* ============= Savings Estimator ============= */
-  const form = document.getElementById('savingsForm');
-  const results = document.getElementById('calcResults');
-  const outBiogas = document.getElementById('outBiogas');
-  const outKwh = document.getElementById('outKwh');
-  const outSavings = document.getElementById('outSavings');
-  const resetBtn = document.getElementById('resetCalc');
+    const links = qsa('a[href^="#"]', nav);
+    const ids = links
+      .map((a) => {
+        const id = (a.getAttribute('href') || '').slice(1);
+        return id ? { id, a } : null;
+      })
+      .filter(Boolean);
 
-  form?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const cows = parseFloat(document.getElementById('cows').value || 0);
-    const manure = parseFloat(document.getElementById('manure').value || 0);
-    const yieldM3 = parseFloat(document.getElementById('yield').value || 0);
-    const kwhPerM3 = parseFloat(document.getElementById('kwhPerM3').value || 0);
-    const price = parseFloat(document.getElementById('price').value || 0);
+    const sections = ids
+      .map(({ id, a }) => {
+        const el = qs(`#${CSS.escape(id)}`);
+        return el ? { el, a } : null;
+      })
+      .filter(Boolean);
 
-    const biogas = cows * manure * yieldM3; // m³/day
-    const kwh = biogas * kwhPerM3;
-    const savings = kwh * price;
+    if (!sections.length) return;
 
-    if (outBiogas) outBiogas.textContent = biogas.toFixed(1);
-    if (outKwh) outKwh.textContent = kwh.toFixed(0);
-    if (outSavings) outSavings.textContent = savings.toFixed(2);
+    const setActive = (activeEl) => {
+      links.forEach((a) => a.classList.remove('is-active'));
+      const hit = sections.find((s) => s.el === activeEl);
+      if (hit) hit.a.classList.add('is-active');
+    };
 
-    if (results) results.hidden = false;
-  });
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => (b.intersectionRatio || 0) - (a.intersectionRatio || 0))[0];
+        if (visible) setActive(visible.target);
+      },
+      {
+        root: null,
+        threshold: [0.2, 0.35, 0.5],
+        rootMargin: '-25% 0px -60% 0px',
+      }
+    );
 
-  resetBtn?.addEventListener('click', () => {
-    form?.reset();
-    if (results) results.hidden = true;
-  });
-});
+    sections.forEach(({ el }) => io.observe(el));
+  }
 
-/* =========================
-   MOBILE BEHAVIOR PACK
-========================= */
+  /* =======================
+   * Reveal on scroll
+   * ======================= */
+  function initReveal() {
+    const els = qsa('.reveal');
+    if (!els.length) return;
 
-// 1) Close mobile nav after clicking a link
-(() => {
-  const navToggle = document.getElementById('nav-toggle');
-  const navLinks = document.querySelectorAll('nav a[href^="#"]');
-  navLinks.forEach(a => {
-    a.addEventListener('click', () => {
-      if (navToggle && navToggle.checked) navToggle.checked = false;
-    });
-  });
-})();
-
-// 2) Make the achievements slider swipeable on touch
-(() => {
-  const track = document.querySelector('.slides');
-  if (!track) return;
-
-  let startX = 0;
-  let deltaX = 0;
-  let isDown = false;
-
-  const onStart = (x) => { isDown = true; startX = x; deltaX = 0; };
-  const onMove  = (x) => { if (!isDown) return; deltaX = x - startX; };
-  const onEnd   = () => {
-    if (!isDown) return;
-    isDown = false;
-    // swipe threshold ~ 60px
-    if (deltaX > 60) document.querySelector('.slider-btn.prev')?.click();
-    else if (deltaX < -60) document.querySelector('.slider-btn.next')?.click();
-  };
-
-  track.addEventListener('touchstart', (e) => onStart(e.touches[0].clientX), {passive:true});
-  track.addEventListener('touchmove',  (e) => onMove(e.touches[0].clientX),  {passive:true});
-  track.addEventListener('touchend',   onEnd);
-})();
-
-// 3) Fix mobile 100vh (address bar) for hero height
-(() => {
-  const setVH = () => {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  };
-  setVH();
-  window.addEventListener('resize', setVH);
-  // You can use var(--vh) in CSS:
-  // e.g., #hero { min-height: calc(var(--vh) * 100); }
-})();
-
-/* ===== Simple-first Calculator ===== */
-(() => {
-  // DOM
-  const animalBtns = document.querySelectorAll('.segmented [data-animal]');
-  const modelBtns  = document.querySelectorAll('.segmented [data-model]');
-  const herdEl     = document.getElementById('herd');
-  const herdOut    = document.getElementById('herdOut');
-  const tariffEl   = document.getElementById('tariff');
-  const currencyEl = document.getElementById('currency');
-  const advBox     = document.getElementById('advancedBox');
-  const advForm    = document.getElementById('advForm');
-  const toggleAdv  = document.getElementById('toggleAdvancedLink');
-
-  const biogasOut  = document.getElementById('biogasOut');
-  const kwhOut     = document.getElementById('kwhOut');
-  const saveOut    = document.getElementById('saveOut');
-  const saveCur    = document.getElementById('saveCur');
-  const recoModel  = document.getElementById('recoModel');
-  const recoHint   = document.getElementById('recoHint');
-  const capexOut   = document.getElementById('capexOut');
-  const capexCur   = document.getElementById('capexCur');
-  const paybackOut = document.getElementById('paybackOut');
-
-  if (!herdEl || !tariffEl) return;
-
-  /* Typical assumptions per animal (rough averages) */
-  const animalDefaults = {
-    cow:     { manure: 25,  yield: 0.04 },  // kg/day, m3/kg
-    buffalo: { manure: 30,  yield: 0.045 },
-    pig:     { manure: 6,   yield: 0.05 },
-    mixed:   { manure: 20,  yield: 0.038 },
-  };
-  const defaultKwhPerM3 = 2.0;
-  const defaultFertPerKg = 0.8; // liters / kg manure
-
-  /* Digester catalogue (USD list) */
-  const digesters = [
-    { name: '15-ton', price: 7900,  herdMax: 120 },
-    { name: '30-ton', price: 12500, herdMax: 250 },
-    { name: '50-ton', price: 17500, herdMax: 9999 },
-  ];
-
-  /* State */
-  let state = {
-    animal: 'cow',
-    model: 'buy',      // buy | partner
-    herd: 100,
-    currency: 'USD',
-    tariff: 0.20,
-    manure: animalDefaults.cow.manure,
-    yield:  animalDefaults.cow.yield,
-    kwhPerM3: defaultKwhPerM3,
-    fertPerKg: defaultFertPerKg,
-  };
-
-  // Currency symbols
-  const sym = { USD: 'USD', GEL: 'GEL', EUR: 'EUR' };
-
-  // Hook up UI
-  animalBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      animalBtns.forEach(b => b.classList.remove('is-active'));
-      btn.classList.add('is-active');
-      state.animal = btn.dataset.animal;
-      state.manure = animalDefaults[state.animal].manure;
-      state.yield  = animalDefaults[state.animal].yield;
-      // mirror to Advanced fields
-      const m = document.getElementById('manure');
-      const y = document.getElementById('yield');
-      if (m) m.value = state.manure;
-      if (y) y.value = state.yield;
-      recalc();
-    });
-  });
-
-  modelBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      modelBtns.forEach(b => b.classList.remove('is-active'));
-      btn.classList.add('is-active');
-      state.model = btn.dataset.model;
-      recalc();
-    });
-  });
-
-  herdEl.addEventListener('input', () => {
-    state.herd = parseInt(herdEl.value || '0', 10);
-    herdOut.textContent = state.herd.toString();
-    recalc();
-  });
-
-  tariffEl.addEventListener('input', () => {
-    state.tariff = parseFloat(tariffEl.value || '0');
-    recalc();
-  });
-
-  currencyEl.addEventListener('change', () => {
-    state.currency = currencyEl.value;
-    saveCur.textContent = ' ' + sym[state.currency];
-    capexCur.textContent = ' ' + sym[state.currency];
-    recalc();
-  });
-
-  // Advanced fields
-  advForm?.addEventListener('input', () => {
-    state.manure   = parseFloat(document.getElementById('manure').value || state.manure);
-    state.yield    = parseFloat(document.getElementById('yield').value || state.yield);
-    state.kwhPerM3 = parseFloat(document.getElementById('kwhPerM3').value || state.kwhPerM3);
-    state.fertPerKg= parseFloat(document.getElementById('fertilizerPerKg').value || state.fertPerKg);
-    recalc();
-  });
-
-  // Toggle Advanced link
-  toggleAdv?.addEventListener('click', (e) => {
-    e.preventDefault();
-    advBox.open = !advBox.open;
-    advBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  });
-
-  // Core math
-  function recommendDigester(herd) {
-    // Rough rule: biogas flow ~ herd size, we map directly to catalog
-    for (const d of digesters) {
-      if (herd <= d.herdMax) return d;
+    if (prefersReducedMotion()) {
+      els.forEach((el) => el.classList.add('is-in'));
+      return;
     }
-    return digesters[digesters.length - 1];
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('is-in');
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.18 }
+    );
+
+    els.forEach((el) => io.observe(el));
   }
 
-  function recalc() {
-    // Inputs
-    const manureIn   = state.herd * state.manure;       // kg/day
-    const biogas     = manureIn * state.yield;          // m3/day
-    const kwh        = biogas * state.kwhPerM3;         // kWh/day
-    const savingsDay = kwh * state.tariff;              // money/day
+  /* =======================
+   * SDG tooltip
+   * ======================= */
+  function initSdgTooltip() {
+    const nodes = qsa('.sdg-node');
+    if (!nodes.length) return;
 
-    // Recommend a digester by herd
-    const d = recommendDigester(state.herd);
+    const tip = document.createElement('div');
+    tip.className = 'sdg-tip';
+    tip.setAttribute('role', 'status');
+    tip.setAttribute('aria-live', 'polite');
+    document.body.appendChild(tip);
 
-    // Capex (partner = 50% upfront)
-    const upfront = state.model === 'partner' ? d.price * 0.5 : d.price;
+    const show = (target) => {
+      const label = target.getAttribute('data-sdg') || '';
+      if (!label) return;
 
-    // Simple payback (energy only), years
-    const daysPerYear = 365; // keep simple for now
-    const annualSavings = savingsDay * daysPerYear;
-    const payback = annualSavings > 0 ? (upfront / annualSavings) : Infinity;
+      tip.textContent = label;
+      const rect = target.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + window.scrollY;
 
-    // Output
-    biogasOut.textContent = biogas.toFixed(1);
-    kwhOut.textContent    = Math.round(kwh).toString();
-    saveOut.textContent   = savingsDay.toFixed(2);
-    saveCur.textContent   = ' ' + sym[state.currency];
+      tip.style.left = `${x}px`;
+      tip.style.top = `${y}px`;
+      tip.classList.add('is-show');
+    };
 
-    recoModel.textContent = `${d.name} digester`;
-    recoHint.textContent  = `Good for up to ~${d.herdMax} animals.`;
-    capexOut.textContent  = upfront.toLocaleString(undefined, { maximumFractionDigits: 0 });
-    capexCur.textContent  = ' ' + sym[state.currency];
+    const hide = () => tip.classList.remove('is-show');
 
-    paybackOut.textContent = isFinite(payback) ? payback.toFixed(1) : '–';
+    nodes.forEach((n) => {
+      n.addEventListener('mouseenter', () => show(n));
+      n.addEventListener('mouseleave', hide);
+      n.addEventListener('focus', () => show(n));
+      n.addEventListener('blur', hide);
+    });
+
+    window.addEventListener('scroll', hide, { passive: true });
+    window.addEventListener('resize', hide);
   }
 
-  // Init values in Advanced from defaults
-  (function seedAdvanced() {
-    const m = document.getElementById('manure');
-    const y = document.getElementById('yield');
-    const k = document.getElementById('kwhPerM3');
-    const f = document.getElementById('fertilizerPerKg');
-    if (m) m.value = state.manure;
-    if (y) y.value = state.yield;
-    if (k) k.value = state.kwhPerM3;
-    if (f) f.value = state.fertPerKg;
-  })();
+  /* =======================
+   * KPI counters (animate when section visible)
+   * ======================= */
+  function initKpis() {
+    const app = qs('#app');
+    const kpis = qsa('.kpi-value', app || document);
+    if (!app || !kpis.length) return;
 
-  // Initial compute
-  herdOut.textContent = herdEl.value;
-  saveCur.textContent = ' ' + sym[state.currency];
-  capexCur.textContent = ' ' + sym[state.currency];
-  recalc();
+    const animate = (el, to, duration = 1100) => {
+      const start = 0;
+      const diff = Math.max(0, to - start);
+      let t0 = null;
+
+      const step = (ts) => {
+        if (!t0) t0 = ts;
+        const p = Math.min((ts - t0) / duration, 1);
+        el.textContent = Math.round(start + diff * p).toString();
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+
+    let done = false;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (done) return;
+        if (entries.some((e) => e.isIntersecting)) {
+          done = true;
+          kpis.forEach((el) => {
+            const to = parseFloat(el.getAttribute('data-count-to') || '0');
+            animate(el, to);
+          });
+          io.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (prefersReducedMotion()) {
+      kpis.forEach((el) => (el.textContent = el.getAttribute('data-count-to') || '0'));
+      return;
+    }
+
+    io.observe(app);
+  }
+
+  /* =======================
+   * Achievements carousel
+   * ======================= */
+  function initCarousel() {
+    const track = qs('#awardSlides');
+    const dotsWrap = qs('#awardDots');
+    const prev = qs('.carousel-btn.prev');
+    const next = qs('.carousel-btn.next');
+    if (!track || !prev || !next || !dotsWrap) return;
+
+    const slides = qsa('.slide', track);
+    if (!slides.length) return;
+
+    let index = 0;
+    let timer = null;
+    let isPaused = false;
+
+    const set = (i) => {
+      index = (i + slides.length) % slides.length;
+      track.style.transform = `translateX(-${index * 100}%)`;
+
+      qsa('.dot', dotsWrap).forEach((d, di) => {
+        d.classList.toggle('is-active', di === index);
+        d.setAttribute('aria-current', di === index ? 'true' : 'false');
+      });
+    };
+
+    // dots
+    dotsWrap.innerHTML = '';
+    slides.forEach((_, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'dot' + (i === 0 ? ' is-active' : '');
+      b.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      b.addEventListener('click', () => {
+        set(i);
+        restart();
+      });
+      dotsWrap.appendChild(b);
+    });
+
+    const restart = () => {
+      if (prefersReducedMotion()) return;
+      if (timer) window.clearInterval(timer);
+      timer = window.setInterval(() => {
+        if (!isPaused) set(index + 1);
+      }, 5200);
+    };
+
+    prev.addEventListener('click', () => {
+      set(index - 1);
+      restart();
+    });
+    next.addEventListener('click', () => {
+      set(index + 1);
+      restart();
+    });
+
+    // keyboard
+    const carousel = track.closest('.carousel');
+    carousel?.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') prev.click();
+      if (e.key === 'ArrowRight') next.click();
+    });
+
+    // pause on hover/focus
+    const pause = () => (isPaused = true);
+    const resume = () => (isPaused = false);
+    carousel?.addEventListener('mouseenter', pause);
+    carousel?.addEventListener('mouseleave', resume);
+    carousel?.addEventListener('focusin', pause);
+    carousel?.addEventListener('focusout', resume);
+
+    // swipe
+    let startX = 0;
+    let dx = 0;
+    let down = false;
+    track.addEventListener(
+      'touchstart',
+      (e) => {
+        down = true;
+        startX = e.touches[0].clientX;
+        dx = 0;
+      },
+      { passive: true }
+    );
+    track.addEventListener(
+      'touchmove',
+      (e) => {
+        if (!down) return;
+        dx = e.touches[0].clientX - startX;
+      },
+      { passive: true }
+    );
+    track.addEventListener('touchend', () => {
+      if (!down) return;
+      down = false;
+      if (dx > 60) prev.click();
+      else if (dx < -60) next.click();
+    });
+
+    // init
+    set(0);
+    restart();
+  }
+
+  /* =======================
+   * Team/advisors tabs
+   * ======================= */
+  function initTabs() {
+    const teamTitle = qs('#teamTitle');
+    const tabTeam = qs('#tab-team');
+    const tabAdv = qs('#tab-advisors');
+    const panelTeam = qs('#panel-team');
+    const panelAdv = qs('#panel-advisors');
+    if (!tabTeam || !tabAdv || !panelTeam || !panelAdv) return;
+
+    const activate = (which) => {
+      const isTeam = which === 'team';
+      tabTeam.classList.toggle('is-active', isTeam);
+      tabAdv.classList.toggle('is-active', !isTeam);
+      tabTeam.setAttribute('aria-selected', String(isTeam));
+      tabAdv.setAttribute('aria-selected', String(!isTeam));
+
+      if (isTeam) {
+        panelAdv.setAttribute('hidden', '');
+        panelAdv.classList.remove('show');
+        panelTeam.removeAttribute('hidden');
+        requestAnimationFrame(() => panelTeam.classList.add('show'));
+        if (teamTitle) teamTitle.textContent = 'Team';
+      } else {
+        panelTeam.setAttribute('hidden', '');
+        panelTeam.classList.remove('show');
+        panelAdv.removeAttribute('hidden');
+        requestAnimationFrame(() => panelAdv.classList.add('show'));
+        if (teamTitle) teamTitle.textContent = 'Advisors';
+      }
+    };
+
+    tabTeam.addEventListener('click', () => activate('team'));
+    tabAdv.addEventListener('click', () => activate('advisors'));
+
+    [tabTeam, tabAdv].forEach((btn) => {
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+          (btn === tabTeam ? tabAdv : tabTeam).focus();
+          (btn === tabTeam ? tabAdv : tabTeam).click();
+        }
+      });
+    });
+  }
+
+  /* =======================
+   * Calculator (simple-first)
+   * ======================= */
+  function initCalculator() {
+    const herdEl = qs('#herd');
+    const tariffEl = qs('#tariff');
+    const currencyEl = qs('#currency');
+    if (!herdEl || !tariffEl || !currencyEl) return;
+
+    const animalBtns = qsa('.segmented [data-animal]');
+    const modelBtns = qsa('.segmented [data-model]');
+    const herdOut = qs('#herdOut');
+
+    const biogasOut = qs('#biogasOut');
+    const kwhOut = qs('#kwhOut');
+    const saveOut = qs('#saveOut');
+    const saveCur = qs('#saveCur');
+    const recoModel = qs('#recoModel');
+    const recoHint = qs('#recoHint');
+    const capexOut = qs('#capexOut');
+    const capexCur = qs('#capexCur');
+    const paybackOut = qs('#paybackOut');
+
+    const advBox = qs('#advancedBox');
+    const advForm = qs('#advForm');
+    const toggleAdv = qs('#toggleAdvancedLink');
+
+    const animalDefaults = {
+      cow: { manure: 25, yield: 0.04 },
+      buffalo: { manure: 30, yield: 0.045 },
+      pig: { manure: 6, yield: 0.05 },
+      mixed: { manure: 20, yield: 0.038 },
+    };
+
+    const digesters = [
+      { name: '15-ton', price: 7900, herdMax: 120 },
+      { name: '30-ton', price: 12500, herdMax: 250 },
+      { name: '50-ton', price: 17500, herdMax: 9999 },
+    ];
+
+    const fmt = (currency, n, digits = 0) => {
+      try {
+        return new Intl.NumberFormat(undefined, {
+          style: 'currency',
+          currency,
+          maximumFractionDigits: digits,
+        }).format(n);
+      } catch {
+        // fallback
+        return `${n.toFixed(digits)} ${currency}`;
+      }
+    };
+
+    const state = {
+      animal: 'cow',
+      model: 'buy',
+      herd: parseInt(herdEl.value || '0', 10),
+      currency: currencyEl.value || 'USD',
+      tariff: parseFloat(tariffEl.value || '0'),
+      manure: animalDefaults.cow.manure,
+      yield: animalDefaults.cow.yield,
+      kwhPerM3: 2.0,
+      fertPerKg: 0.8,
+    };
+
+    const recommend = (herd) => digesters.find((d) => herd <= d.herdMax) || digesters[digesters.length - 1];
+
+    const syncAria = (buttons, activeBtn) => {
+      buttons.forEach((b) => {
+        const active = b === activeBtn;
+        b.classList.toggle('is-active', active);
+        b.setAttribute('aria-selected', String(active));
+      });
+    };
+
+    const recalc = () => {
+      const manureIn = state.herd * state.manure; // kg/day
+      const biogas = manureIn * state.yield; // m3/day
+      const kwh = biogas * state.kwhPerM3;
+      const savingsDay = kwh * state.tariff;
+
+      const d = recommend(state.herd);
+      const upfront = state.model === 'partner' ? d.price * 0.5 : d.price;
+
+      const annualSavings = savingsDay * 365;
+      const payback = annualSavings > 0 ? upfront / annualSavings : Infinity;
+
+      if (herdOut) herdOut.textContent = String(state.herd);
+      if (biogasOut) biogasOut.textContent = biogas.toFixed(1);
+      if (kwhOut) kwhOut.textContent = String(Math.round(kwh));
+
+      if (saveOut) saveOut.textContent = savingsDay.toFixed(2);
+      if (saveCur) saveCur.textContent = ` ${state.currency}`;
+
+      if (recoModel) recoModel.textContent = `${d.name} digester`;
+      if (recoHint) recoHint.textContent = `Good for up to ~${d.herdMax} animals.`;
+
+      if (capexOut) capexOut.textContent = fmt(state.currency, upfront, 0);
+      if (capexCur) capexCur.textContent = '';
+
+      if (paybackOut) paybackOut.textContent = isFinite(payback) ? payback.toFixed(1) : '–';
+    };
+
+    // Animal buttons
+    animalBtns.forEach((btn) => {
+      const animal = btn.getAttribute('data-animal');
+      btn.addEventListener('click', () => {
+        if (!animal || !animalDefaults[animal]) return;
+        state.animal = animal;
+        state.manure = animalDefaults[animal].manure;
+        state.yield = animalDefaults[animal].yield;
+        syncAria(animalBtns, btn);
+
+        // mirror into advanced fields
+        const m = qs('#manure');
+        const y = qs('#yield');
+        if (m) m.value = String(state.manure);
+        if (y) y.value = String(state.yield);
+
+        recalc();
+      });
+    });
+
+    // Model buttons
+    modelBtns.forEach((btn) => {
+      const model = btn.getAttribute('data-model');
+      btn.addEventListener('click', () => {
+        if (!model) return;
+        state.model = model;
+        syncAria(modelBtns, btn);
+        recalc();
+      });
+    });
+
+    herdEl.addEventListener('input', () => {
+      state.herd = parseInt(herdEl.value || '0', 10);
+      recalc();
+    });
+
+    tariffEl.addEventListener('input', () => {
+      state.tariff = parseFloat(tariffEl.value || '0');
+      recalc();
+    });
+
+    currencyEl.addEventListener('change', () => {
+      state.currency = currencyEl.value;
+      recalc();
+    });
+
+    advForm?.addEventListener('input', () => {
+      const manure = parseFloat((qs('#manure')?.value || '').trim());
+      const yieldV = parseFloat((qs('#yield')?.value || '').trim());
+      const kwhPerM3 = parseFloat((qs('#kwhPerM3')?.value || '').trim());
+      const fertPerKg = parseFloat((qs('#fertilizerPerKg')?.value || '').trim());
+
+      if (!Number.isNaN(manure)) state.manure = manure;
+      if (!Number.isNaN(yieldV)) state.yield = yieldV;
+      if (!Number.isNaN(kwhPerM3)) state.kwhPerM3 = kwhPerM3;
+      if (!Number.isNaN(fertPerKg)) state.fertPerKg = fertPerKg;
+
+      recalc();
+    });
+
+    toggleAdv?.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!advBox) return;
+      advBox.open = !advBox.open;
+      advBox.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth', block: 'nearest' });
+    });
+
+    // seed advanced fields from defaults
+    const m = qs('#manure');
+    const y = qs('#yield');
+    const k = qs('#kwhPerM3');
+    const f = qs('#fertilizerPerKg');
+    if (m) m.value = String(state.manure);
+    if (y) y.value = String(state.yield);
+    if (k) k.value = String(state.kwhPerM3);
+    if (f) f.value = String(state.fertPerKg);
+
+    recalc();
+  }
+
+  /* =======================
+   * Contact form (mailto)
+   * ======================= */
+  function initContactForm() {
+    const form = qs('#contactForm');
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = (qs('#name')?.value || '').trim();
+      const email = (qs('#email')?.value || '').trim();
+      const message = (qs('#message')?.value || '').trim();
+
+      const to = 'bionovainfo1@gmail.com';
+      const subject = encodeURIComponent(`BioNova inquiry — ${name || 'Website visitor'}`);
+      const body = encodeURIComponent(
+        [
+          `Name: ${name}`,
+          `Email: ${email}`,
+          '',
+          message,
+          '',
+          '— Sent from bionova website',
+        ].join('\n')
+      );
+
+      window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initNav();
+    initActiveNav();
+    initReveal();
+    initSdgTooltip();
+    initKpis();
+    initCarousel();
+    initTabs();
+    initCalculator();
+    initContactForm();
+  });
 })();
-
