@@ -222,6 +222,43 @@ nav ul li a:hover { color:#28a745; }
 .slider-btn.next { right:max(12px, 2vw); }
 
 /* =========================
+   View more / View less
+========================= */
+.view-more-row { display:flex; justify-content:center; margin-top:16px; }
+.view-more-btn { min-width: 170px; }
+
+/* When expanded: show all achievement slides as a grid */
+.slider.is-expanded { overflow: visible; }
+.slider.is-expanded .slider-btn { display: none; }
+.slider.is-expanded .slides {
+  transform: none !important;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.slider.is-expanded .slide {
+  min-width: auto;
+  background: #fff;
+  border: 1px solid rgba(15, 122, 42, .10);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.06);
+}
+.slider.is-expanded .slide img {
+  width: 100%;
+  max-width: none;
+  margin: 0 0 10px;
+}
+.slider.is-expanded .slide p { max-width: none; }
+
+@media (max-width: 1100px) {
+  .slider.is-expanded .slides { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .slider.is-expanded .slides { grid-template-columns: 1fr; }
+}
+
+/* =========================
    Team
 ========================= */
 #founders { background:#fff; padding:50px 0; text-align:center; }
@@ -258,6 +295,30 @@ nav ul li a:hover { color:#28a745; }
 .partner-slide img { height:90px; margin:0 32px; vertical-align:middle; filter:brightness(1.12) contrast(1.08) saturate(1.05); transition:transform .25s, filter .25s; }
 .partner-slide img:hover { transform:translateY(-2px) scale(1.05); filter:brightness(1.22) contrast(1.12) saturate(1.1); }
 @keyframes scrollPartners { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* =========================
+   Blog / Articles
+========================= */
+#blog { background:#fff; padding:70px 0; }
+#blog h2 { font-size:2.4rem; color:#28a745; text-align:center; margin-bottom:10px; }
+.blog-sub { text-align:center; color:#475569; margin-bottom:18px; }
+.blog-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 1100px; margin: 0 auto; }
+.blog-card { background:#f8fafb; border:1px solid #e6eef0; border-radius: 18px; overflow:hidden; box-shadow: 0 10px 24px rgba(0,0,0,.06); transition: transform .2s ease, box-shadow .2s ease; }
+.blog-card:hover { transform: translateY(-4px); box-shadow: 0 18px 36px rgba(0,0,0,.10); }
+.blog-link { display:block; text-decoration:none; color:inherit; }
+.blog-thumb { height: 170px; background: radial-gradient(60% 60% at 20% 20%, rgba(255,255,255,.25) 0%, transparent 60%), radial-gradient(40% 40% at 80% 80%, rgba(255,255,255,.18) 0%, transparent 60%), linear-gradient(135deg, #34b456, #2aa147 45%, #239345); display:flex; align-items:center; justify-content:center; }
+.blog-thumb-text { font-weight: 900; color: rgba(255,255,255,.92); background: rgba(0,0,0,.18); padding: 8px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,.20); }
+.blog-body { padding: 14px; text-align:left; }
+.blog-meta { font-size: .85rem; font-weight: 800; color:#2c643a; margin-bottom: 8px; }
+.blog-title { font-size: 1.12rem; color:#1f2937; margin-bottom: 8px; }
+.blog-excerpt { color:#475569; line-height: 1.55; margin-bottom: 10px; }
+.blog-cta { font-weight: 900; color:#0f7a2a; }
+
+/* Blog: show 3, reveal the rest on "View more" */
+.blog-grid:not(.is-expanded) .blog-card:nth-child(n+4) { display: none; }
+
+@media (max-width: 1100px) { .blog-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .blog-grid { grid-template-columns: 1fr; } .blog-thumb { height: 160px; } }
 
 /* =========================
    Contact & footer

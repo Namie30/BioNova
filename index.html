@@ -37,6 +37,7 @@
           <li><a href="#pricing">Pricing</a></li>
           <li><a href="#calculator">Savings</a></li>
           <li><a href="#achievements">Our Wins</a></li>
+          <li><a href="#blog">Blog</a></li>
           <li><a href="#founders">Team</a></li>
        <!--   <li><a href="#partners">Partners</a></li> -->
           <li><a href="#contact">Contact</a></li>
@@ -513,7 +514,7 @@
   <section id="achievements">
     <div class="container">
       <h2>Our Wins &amp; Awards</h2>
-      <div class="slider" aria-roledescription="carousel">
+      <div class="slider" id="achievementsContent" aria-roledescription="carousel">
         <div class="slides">
           <div class="slide">
             <img src="Images/CUnicorn-3.jpg" alt="CUnicorn Batch 3 award"/>
@@ -566,6 +567,81 @@
 
         <button class="slider-btn prev" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
         <button class="slider-btn next" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
+      </div>
+
+      <!-- View more: expands slider into a grid of all awards -->
+      <div class="view-more-row">
+        <button
+          class="btn view-more-btn"
+          type="button"
+          id="achievementsViewMore"
+          aria-expanded="false"
+          aria-controls="achievementsContent"
+        >
+          View more
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog / Articles -->
+  <section id="blog" aria-label="BioNova blog and articles">
+    <div class="container">
+      <h2>Blog</h2>
+      <p class="blog-sub">Articles, updates, pilots, and behind-the-scenes engineering.</p>
+
+      <div class="blog-grid" id="blogGrid">
+        <!-- Template card 1 -->
+        <article class="blog-card">
+          <a class="blog-link" href="#" aria-label="Open article: Title goes here">
+            <div class="blog-thumb" aria-hidden="true"><span class="blog-thumb-text">Add image</span></div>
+            <div class="blog-body">
+              <div class="blog-meta">Dec 2025 • Case study</div>
+              <h3 class="blog-title">Title goes here</h3>
+              <p class="blog-excerpt">Short teaser text. Replace this with 1–2 sentences about the post.</p>
+              <span class="blog-cta">Read article →</span>
+            </div>
+          </a>
+        </article>
+
+        <!-- Template card 2 -->
+        <article class="blog-card">
+          <a class="blog-link" href="#" aria-label="Open article: Title goes here">
+            <div class="blog-thumb" aria-hidden="true"><span class="blog-thumb-text">Add image</span></div>
+            <div class="blog-body">
+              <div class="blog-meta">Dec 2025 • Product</div>
+              <h3 class="blog-title">Title goes here</h3>
+              <p class="blog-excerpt">Short teaser text. Replace this with 1–2 sentences about the post.</p>
+              <span class="blog-cta">Read article →</span>
+            </div>
+          </a>
+        </article>
+
+        <!-- Template card 3 -->
+        <article class="blog-card">
+          <a class="blog-link" href="#" aria-label="Open article: Title goes here">
+            <div class="blog-thumb" aria-hidden="true"><span class="blog-thumb-text">Add image</span></div>
+            <div class="blog-body">
+              <div class="blog-meta">Dec 2025 • Press</div>
+              <h3 class="blog-title">Title goes here</h3>
+              <p class="blog-excerpt">Short teaser text. Replace this with 1–2 sentences about the post.</p>
+              <span class="blog-cta">Read article →</span>
+            </div>
+          </a>
+        </article>
+      </div>
+
+      <!-- View more: shows additional blog cards when you add them -->
+      <div class="view-more-row">
+        <button
+          class="btn view-more-btn"
+          type="button"
+          id="blogViewMore"
+          aria-expanded="false"
+          aria-controls="blogGrid"
+        >
+          View more
+        </button>
       </div>
     </div>
   </section>
