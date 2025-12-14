@@ -22,10 +22,18 @@ header {
 .logo-container { display:flex; align-items:center; }
 .logo-img { width:65px; margin-right:12px; }
 .logo { font-size:2.3em; color:#28a745; font-weight:700; }
-nav ul { list-style:none; display:flex; }
-nav ul li { margin-left:20px; }
+nav { flex: 1; overflow-x: auto; }
+nav ul { list-style:none; display:flex; justify-content:flex-end; flex-wrap:nowrap; gap:20px; }
+nav ul li { margin-left:0; }
 nav ul li a { text-decoration:none; color:#333; transition:color .3s; }
 nav ul li a:hover { color:#28a745; }
+nav ul li a { white-space: nowrap; }
+
+/* Reduce header crowding on medium screens (prevents multi-line menu) */
+@media (max-width: 1200px) {
+  nav ul { gap: 14px; }
+  nav ul li a { font-size: 0.95rem; }
+}
 
 /* =========================
    Hero (SDG Constellation)
