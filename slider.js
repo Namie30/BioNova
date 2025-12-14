@@ -1,39 +1,5 @@
 // slider.js
 document.addEventListener('DOMContentLoaded', () => {
-  /* ===================== Achievements Slider ===================== */
-  const slides = document.querySelectorAll('.slide');
-  const slidesContainer = document.querySelector('.slides');
-  const nextBtn = document.querySelector('.slider-btn.next');
-  const prevBtn = document.querySelector('.slider-btn.prev');
-  let currentSlide = 0;
-  let intervalId;
-
-  function updateSlider() {
-    if (!slidesContainer) return;
-    slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
-  }
-
-  function nextSlide() {
-    if (!slides.length) return;
-    currentSlide = (currentSlide + 1) % slides.length;
-    updateSlider();
-  }
-
-  function prevSlide() {
-    if (!slides.length) return;
-    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-    updateSlider();
-  }
-
-  nextBtn?.addEventListener('click', () => { nextSlide(); resetInterval(); });
-  prevBtn?.addEventListener('click', () => { prevSlide(); resetInterval(); });
-
-  function resetInterval() {
-    clearInterval(intervalId);
-    intervalId = setInterval(nextSlide, 5000);
-  }
-  intervalId = setInterval(nextSlide, 5000);
-
   /* ===== Team/Advisors toggle (accessible + animated) ===== */
   const teamTitle = document.getElementById('teamTitle');
   const tabTeam = document.getElementById('tab-team');
@@ -98,36 +64,51 @@ document.addEventListener('DOMContentLoaded', () => {
   animateValue(document.getElementById('kpi-elec'), 240);  // kWh/day
   animateValue(document.getElementById('kpi-fert'), 500);  // liters/day
 
-  /* ============= Savings Estimator ============= */
-  const form = document.getElementById('savingsForm');
-  const results = document.getElementById('calcResults');
-  const outBiogas = document.getElementById('outBiogas');
-  const outKwh = document.getElementById('outKwh');
-  const outSavings = document.getElementById('outSavings');
-  const resetBtn = document.getElementById('resetCalc');
+  /* ============= Achievements: open card details in modal ============= */
+  const dialog = document.getElementById('achDialog');
+  const dialogImg = document.getElementById('achDialogImg');
+  const dialogTitle = document.getElementById('achDialogTitle');
+  const dialogText = document.getElementById('achDialogText');
+  const dialogOpen = document.getElementById('achDialogOpen');
+  const dialogClose = dialog?.querySelector('.ach-close');
+  const achCards = document.querySelectorAll('.ach-card');
 
-  form?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const cows = parseFloat(document.getElementById('cows').value || 0);
-    const manure = parseFloat(document.getElementById('manure').value || 0);
-    const yieldM3 = parseFloat(document.getElementById('yield').value || 0);
-    const kwhPerM3 = parseFloat(document.getElementById('kwhPerM3').value || 0);
-    const price = parseFloat(document.getElementById('price').value || 0);
+  function openAchievement(card) {
+    if (!dialog || !dialogImg || !dialogTitle || !dialogText || !dialogOpen) return;
 
-    const biogas = cows * manure * yieldM3; // m³/day
-    const kwh = biogas * kwhPerM3;
-    const savings = kwh * price;
+    const imgSrc = card.getAttribute('data-img') || card.getAttribute('href') || '';
+    const title = card.getAttribute('data-title') || '';
+    const text = card.getAttribute('data-text') || '';
 
-    if (outBiogas) outBiogas.textContent = biogas.toFixed(1);
-    if (outKwh) outKwh.textContent = kwh.toFixed(0);
-    if (outSavings) outSavings.textContent = savings.toFixed(2);
+    dialogImg.src = imgSrc;
+    dialogImg.alt = title ? `${title} image` : 'Achievement image';
+    dialogTitle.textContent = title;
+    dialogText.textContent = text;
+    dialogOpen.href = imgSrc;
 
-    if (results) results.hidden = false;
+    if (typeof dialog.showModal === 'function') dialog.showModal();
+    else dialog.setAttribute('open', '');
+  }
+
+  function closeAchievement() {
+    if (!dialog) return;
+    if (typeof dialog.close === 'function') dialog.close();
+    else dialog.removeAttribute('open');
+  }
+
+  achCards.forEach((card) => {
+    card.addEventListener('click', (e) => {
+      // keep no-JS fallback (opens image) by only preventing default when modal exists
+      if (!dialog) return;
+      e.preventDefault();
+      openAchievement(card);
+    });
   });
 
-  resetBtn?.addEventListener('click', () => {
-    form?.reset();
-    if (results) results.hidden = true;
+  dialogClose?.addEventListener('click', closeAchievement);
+  dialog?.addEventListener('click', (e) => {
+    // close when clicking outside the dialog content
+    if (e.target === dialog) closeAchievement();
   });
 });
 
@@ -146,29 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 })();
 
-// 2) Make the achievements slider swipeable on touch
-(() => {
-  const track = document.querySelector('.slides');
-  if (!track) return;
-
-  let startX = 0;
-  let deltaX = 0;
-  let isDown = false;
-
-  const onStart = (x) => { isDown = true; startX = x; deltaX = 0; };
-  const onMove  = (x) => { if (!isDown) return; deltaX = x - startX; };
-  const onEnd   = () => {
-    if (!isDown) return;
-    isDown = false;
-    // swipe threshold ~ 60px
-    if (deltaX > 60) document.querySelector('.slider-btn.prev')?.click();
-    else if (deltaX < -60) document.querySelector('.slider-btn.next')?.click();
-  };
-
-  track.addEventListener('touchstart', (e) => onStart(e.touches[0].clientX), {passive:true});
-  track.addEventListener('touchmove',  (e) => onMove(e.touches[0].clientX),  {passive:true});
-  track.addEventListener('touchend',   onEnd);
-})();
+// 2) (Achievements slider removed; cards are tap-friendly by default)
 
 // 3) Fix mobile 100vh (address bar) for hero height
 (() => {
