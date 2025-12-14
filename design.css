@@ -18,13 +18,13 @@ header {
   background:#fff; position:fixed; width:100%; top:0; z-index:999;
   box-shadow:0 2px 4px rgba(0,0,0,.1);
 }
-.header-container { display:flex; justify-content:space-between; align-items:center; padding:15px; }
+.header-container { display:flex; justify-content:space-between; align-items:center; padding:15px; flex-wrap:wrap; gap:10px; }
 .logo-container { display:flex; align-items:center; }
 .logo-img { width:65px; margin-right:12px; }
 .logo { font-size:2.3em; color:#28a745; font-weight:700; }
-nav ul { list-style:none; display:flex; }
-nav ul li { margin-left:20px; }
-nav ul li a { text-decoration:none; color:#333; transition:color .3s; }
+nav ul { list-style:none; display:flex; flex-wrap:wrap; justify-content:flex-end; gap:12px 16px; }
+nav ul li { margin-left:0; }
+nav ul li a { text-decoration:none; color:#333; transition:color .3s; white-space:nowrap; font-size:.98rem; }
 nav ul li a:hover { color:#28a745; }
 
 /* =========================
@@ -101,25 +101,6 @@ nav ul li a:hover { color:#28a745; }
 .highlight { color:#0f7a2a; font-weight:800; }
 .mini-proof { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:18px; }
 .proof-pill { background:#e9f7ee; color:#2c643a; padding:10px 14px; border-radius:999px; font-weight:700; font-size:.92rem; }
-
-/* =========================
-   App
-========================= */
-#app { background:#fff; padding:70px 0; }
-.app-container { display:flex; align-items:center; justify-content:space-between; gap:28px; flex-wrap:wrap; }
-.app-text { flex:1 1 420px; }
-#app h2 { font-size:2.4rem; color:#28a745; margin-bottom:10px; }
-.app-text p { margin-bottom:12px; line-height:1.6; }
-.app-list { list-style:none; margin:10px 0 16px; }
-.app-list li { margin:8px 0; }
-.app-list i { color:#28a745; margin-right:6px; }
-.kpi-wrap { display:flex; gap:14px; margin:12px 0 16px; flex-wrap:wrap; }
-.kpi { background:#f4fdf7; padding:14px 16px; border-radius:12px; text-align:center; min-width:140px; }
-.kpi span { display:block; font-size:1.4rem; font-weight:800; color:#0f7a2a; }
-.kpi small { display:block; font-size:.8rem; color:#475569; }
-.app-image { flex:1 1 420px; text-align:center; }
-.app-image img { width:100%; max-width:520px; border-radius:16px; box-shadow:0 10px 24px rgba(0,0,0,.08); }
-.app-note { font-size:.85rem; color:#64748b; margin-top:8px; }
 
 /* =========================
    Setup
@@ -202,24 +183,63 @@ nav ul li a:hover { color:#28a745; }
 .fineprint { color:#6b7280; font-size:.85rem; margin-top:10px; }
 
 /* =========================
-   Achievements (slider)
+   Achievements (grid)
 ========================= */
 #achievements { background:#f4fdf7; padding:70px 0 50px; text-align:center; }
 #achievements h2 { font-size:2.4rem; margin-bottom:24px; color:#28a745; }
-.slider { position:relative; width:100%; overflow:hidden; }
-.slides { display:flex; transition:transform .5s ease-in-out; }
-.slide { min-width:100%; padding:0 0 20px; text-align:center; }
-.slide img { display:block; width:clamp(360px, 55vw, 600px); height:auto; margin:0 auto 14px; border-radius:12px; box-shadow:0 10px 28px rgba(0,0,0,.12); object-fit:cover; }
-.slide h3 { font-size:clamp(20px,2vw,28px); margin-bottom:6px; color:#1f2937; }
-.slide p { max-width:clamp(500px, 70vw, 850px); margin:0 auto; line-height:1.6; color:#475569; }
-.slider-btn {
-  position:absolute; top:calc(50% - 10px); width:40px; height:40px; border-radius:50%;
-  background:#28a745; color:#fff; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center;
-  box-shadow:0 6px 14px rgba(0,0,0,.18); transition:background .2s, transform .2s; z-index:2;
+.ach-sub { color:#475569; margin:-10px auto 18px; max-width:760px; }
+.achievement-grid {
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:16px;
+  max-width:1100px;
+  margin:0 auto;
 }
-.slider-btn:hover { background:#218838; transform:translateY(-1px) scale(1.04); }
-.slider-btn.prev { left:max(12px, 2vw); }
-.slider-btn.next { right:max(12px, 2vw); }
+.ach-card {
+  display:flex;
+  flex-direction:column;
+  text-decoration:none;
+  color:inherit;
+  background: #f1f6ff;
+  border: 1px solid rgba(15, 122, 42, .10);
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.06);
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.ach-card:hover,
+.ach-card:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 36px rgba(0,0,0,.10);
+  border-color: rgba(40,167,69,.35);
+  outline: none;
+}
+.ach-media {
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.06);
+}
+.ach-media img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  display: block;
+}
+.ach-body { padding-top: 12px; text-align: left; }
+.ach-body h3 { font-size: 1.05rem; color:#0b2a16; margin-bottom: 6px; }
+.ach-body p { color:#475569; line-height: 1.45; font-size: .95rem; }
+
+/* See more buttons (Wins + Blog) */
+.see-more-wrap { display:flex; justify-content:center; margin-top:18px; }
+.btn-see-more {
+  background:#28a745;
+  border: 2px solid #28a745;
+  color:#fff;
+}
+.btn-see-more:hover { background:#218838; border-color:#218838; }
+.is-hidden { display:none !important; }
 
 /* =========================
    Team
@@ -273,6 +293,53 @@ nav ul li a:hover { color:#28a745; }
 .contact-social img:hover { transform:scale(1.08); }
 
 footer { background:#333; color:#fff; text-align:center; padding:20px 0; }
+
+/* =========================
+   Blog / Articles
+========================= */
+#blog { background:#fff; padding:70px 0; }
+#blog h2 { font-size:2.4rem; color:#28a745; text-align:center; margin-bottom:10px; }
+.blog-sub { text-align:center; color:#475569; margin-bottom:18px; }
+.blog-grid {
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.blog-card {
+  background:#f8fafb;
+  border:1px solid #e6eef0;
+  border-radius: 18px;
+  overflow:hidden;
+  box-shadow: 0 10px 24px rgba(0,0,0,.06);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.blog-card:hover { transform: translateY(-4px); box-shadow: 0 18px 36px rgba(0,0,0,.10); }
+.blog-link { display:block; text-decoration:none; color:inherit; }
+.blog-thumb {
+  height: 170px;
+  background:
+    radial-gradient(60% 60% at 20% 20%, rgba(255,255,255,.25) 0%, transparent 60%),
+    radial-gradient(40% 40% at 80% 80%, rgba(255,255,255,.18) 0%, transparent 60%),
+    linear-gradient(135deg, #34b456, #2aa147 45%, #239345);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.blog-thumb-text {
+  font-weight: 900;
+  color: rgba(255,255,255,.92);
+  background: rgba(0,0,0,.18);
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.20);
+}
+.blog-body { padding: 14px; text-align:left; }
+.blog-meta { font-size: .85rem; font-weight: 800; color:#2c643a; margin-bottom: 8px; }
+.blog-title { font-size: 1.12rem; color:#1f2937; margin-bottom: 8px; }
+.blog-excerpt { color:#475569; line-height: 1.55; margin-bottom: 10px; }
+.blog-cta { font-weight: 900; color:#0f7a2a; }
 
 /* =========================
    Calculator
@@ -333,9 +400,6 @@ footer { background:#333; color:#fff; text-align:center; padding:20px 0; }
   nav ul li { margin:10px 0; text-align:center; }
 
   .about-container { flex-direction:column; }
-  .app-container { flex-direction:column; }
-
-  .slider-btn { top:35%; width:32px; height:32px; font-size:1.2rem; }
 
   .calc-grid { grid-template-columns:1fr; }
   .calc-results { grid-template-columns:1fr; }
@@ -482,9 +546,17 @@ footer { background:#333; color:#fff; text-align:center; padding:20px 0; }
 }
 
 /* Achievements slider: smaller arrows & images */
+@media (max-width: 1100px) {
+  .achievement-grid { grid-template-columns: repeat(3, 1fr); }
+  .blog-grid { grid-template-columns: repeat(2, 1fr); }
+}
 @media (max-width: 768px) {
-  .slider-btn { top: 34%; width: 34px; height: 34px; font-size: 1.1rem; }
-  .slide img { width: min(92vw, 560px); }
+  .achievement-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .achievement-grid { grid-template-columns: 1fr; }
+  .blog-grid { grid-template-columns: 1fr; }
+  .blog-thumb { height: 160px; }
 }
 
 /* Team cards: full width with comfy spacing */
