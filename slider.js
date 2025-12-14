@@ -34,6 +34,56 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   intervalId = setInterval(nextSlide, 5000);
 
+  /* ===================== View more / View less (Awards + Blog) ===================== */
+  (() => {
+    // Awards: expand the slider into a grid
+    const achToggleBtn = document.getElementById('achievementsViewMore');
+    const achContent = document.getElementById('achievementsContent');
+
+    const setAchExpanded = (expanded) => {
+      if (!achToggleBtn || !achContent) return;
+      achContent.classList.toggle('is-expanded', expanded);
+      achToggleBtn.setAttribute('aria-expanded', String(expanded));
+      achToggleBtn.textContent = expanded ? 'View less' : 'View more';
+
+      // Pause autoplay while expanded (so grid doesn't keep sliding)
+      if (expanded) {
+        clearInterval(intervalId);
+      } else {
+        // Restore slider position + autoplay
+        updateSlider();
+        resetInterval();
+      }
+    };
+
+    achToggleBtn?.addEventListener('click', () => {
+      const expanded = !(achToggleBtn.getAttribute('aria-expanded') === 'true');
+      setAchExpanded(expanded);
+    });
+
+    // Blog: show all cards after the first 3
+    const blogToggleBtn = document.getElementById('blogViewMore');
+    const blogGrid = document.getElementById('blogGrid');
+
+    const setBlogExpanded = (expanded) => {
+      if (!blogToggleBtn || !blogGrid) return;
+      blogGrid.classList.toggle('is-expanded', expanded);
+      blogToggleBtn.setAttribute('aria-expanded', String(expanded));
+      blogToggleBtn.textContent = expanded ? 'View less' : 'View more';
+    };
+
+    // Hide the button if there aren't more than 3 cards
+    if (blogToggleBtn && blogGrid) {
+      const cardCount = blogGrid.querySelectorAll('.blog-card').length;
+      if (cardCount <= 3) blogToggleBtn.style.display = 'none';
+    }
+
+    blogToggleBtn?.addEventListener('click', () => {
+      const expanded = !(blogToggleBtn.getAttribute('aria-expanded') === 'true');
+      setBlogExpanded(expanded);
+    });
+  })();
+
   /* ===== Team/Advisors toggle (accessible + animated) ===== */
   const teamTitle = document.getElementById('teamTitle');
   const tabTeam = document.getElementById('tab-team');
