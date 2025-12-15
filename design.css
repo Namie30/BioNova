@@ -176,7 +176,7 @@ nav ul li a:hover { color:#28a745; }
 .kpi span { display:block; font-size:1.4rem; font-weight:800; color:#0f7a2a; }
 .kpi small { display:block; font-size:.8rem; color:#475569; }
 .app-image { flex:1 1 420px; text-align:center; }
-.app-image img { width:100%; max-width:390px; border-radius:16px; box-shadow:0 10px 24px rgba(0,0,0,.08); }
+.app-image img { width:100%; max-width:390px; border-radius:16px; box-shadow:0 10px 24px rgba(250, 249, 249, 0); }
 .app-note { font-size:.85rem; color:#64748b; margin-top:8px; }
  
 /* =========================
